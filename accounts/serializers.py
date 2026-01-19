@@ -1,7 +1,7 @@
 from rest_framework.authtoken.models import Token
 from datetime import date
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 
 User = get_user_model()
 
@@ -51,3 +51,22 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
         Token.objects.create(user=user)
         return user
+
+
+
+
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        user = authenticate(
+            username=attrs['username'],
+            password=attrs['password']
+        )
+
+        if not user:
+            raise serializers.ValidationError("Invalid username or password")
+
+        attrs['user'] = user
+        return attrs
