@@ -195,7 +195,7 @@ The API uses token-based authentication via Django REST Framework.
 ```bash
 POST /api/token/
 {
-    "email": "user@example.com",
+    "username": "username",
     "password": "your_password"
 }
 ```

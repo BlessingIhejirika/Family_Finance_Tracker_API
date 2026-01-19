@@ -5,5 +5,5 @@ urlpatterns = [
     path('invite/', InviteFamilyMember.as_view()),
     path('accept-invite/', AcceptInvite.as_view(), name='accept-invite'),
     path('members/<int:family_id>/', GetAFamilyMembers.as_view(), name='family-members'),
-    path('members/', GetFamilyMembers.as_view(), name='family-members'),
+    # path('members/', GetFamilyMembers.as_view(), name='family-members'),
 ]
