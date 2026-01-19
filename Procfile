@@ -1,1 +1,1 @@
-web: gunicorn social_media_api.wsgi:application --log-file -
+web: gunicorn alx_capstone_project.wsgi:application --log-file -

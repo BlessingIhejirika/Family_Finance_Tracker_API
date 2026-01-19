@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-=bf+&ju$%8%$#ypyu1qr*=*(2%bqs3+#2%!t7)uxfjmrt+j&$o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['capstonefinancialapp.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -88,12 +88,20 @@ WSGI_APPLICATION = 'alx_capstone_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'PORT': ''
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'PORT': ''
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}",
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 

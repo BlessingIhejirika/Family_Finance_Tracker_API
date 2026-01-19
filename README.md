@@ -151,7 +151,7 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-The API will be available at `http://localhost:8000/`
+The API will be available at `https://capstonefinancialapp-103f06625006.herokuapp.com/ `
 
 
 ## API Endpoints
