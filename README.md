@@ -29,7 +29,7 @@ The Family Finance Tracker API enables families to collaboratively manage their 
 
 #### 1. User & Family Management
 - Full CRUD operations for user accounts
-- Create and manage family groups
+- Create and manage family members
 - Invite users to join families
 - Assign roles within family groups
 

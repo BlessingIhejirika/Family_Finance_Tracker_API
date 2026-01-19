@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
-
-
+import uuid
 
 
 User = settings.AUTH_USER_MODEL
@@ -28,3 +27,11 @@ class FamilyMembership(models.Model):
     class Meta:
         unique_together = ('user', 'family')
 
+
+
+class FamilyInvite(models.Model):
+    family = models.ForeignKey(Family, on_delete=models.CASCADE)
+    email = models.EmailField()
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
