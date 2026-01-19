@@ -87,7 +87,7 @@ class AcceptInvite(APIView):
         return Response({"message": "Joined family successfully"})
 
 
-class GetFamilyMembers(APIView):
+class GetAFamilyMembers(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, family_id):
