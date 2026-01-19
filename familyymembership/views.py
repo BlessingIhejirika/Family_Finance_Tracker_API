@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Family, FamilyMembership, FamilyInvite
-from .serializers import FamilyCreateSerializer, FamilyInviteSerializer
+from .serializers import FamilyCreateSerializer, FamilyInviteSerializer, GetFamilyMemberSerializer
 from django.shortcuts import get_object_or_404
 
 
@@ -85,3 +85,17 @@ class AcceptInvite(APIView):
         invite.save()
 
         return Response({"message": "Joined family successfully"})
+
+
+class GetFamilyMembers(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, family_id):
+        family = get_object_or_404(Family, id=family_id)
+      
+        if not FamilyMembership.objects.filter(user=request.user, family=family).exists():
+            return Response({"detail": "You are not a member of this family"}, status=403)
+
+        memberships = FamilyMembership.objects.filter(family=family)
+        serializer = GetFamilyMemberSerializer(memberships, many=True)
+        return Response(serializer.data)

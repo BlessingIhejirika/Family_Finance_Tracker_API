@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'familyymembership',
     'rest_framework',
     'rest_framework.authtoken',
+    'familyaccount',
 ]
 
 REST_FRAMEWORK = {
