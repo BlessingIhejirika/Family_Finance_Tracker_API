@@ -167,6 +167,7 @@ POST /api/accounts/register/
     "password": "securepassword123",
     "first_name": "John",
     "last_name": "Doe"
+    "role": "admin or member"
 }
 ```
 
@@ -177,7 +178,8 @@ POST /api/accounts/register/
     "username": "john_doe",
     "email": "john@example.com",
     "first_name": "John",
-    "last_name": "Doe"
+    "last_name": "Doe",
+    "role": "role"
 }
 ```
 
