@@ -153,7 +153,326 @@ python manage.py runserver
 
 The API will be available at `http://localhost:8000/`
 
+
 ## API Endpoints
+
+### Authentication
+
+#### Register
+```bash
+POST /api/accounts/register/
+{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "securepassword123",
+    "first_name": "John",
+    "last_name": "Doe"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "id": 1,
+    "username": "john_doe",
+    "email": "john@example.com",
+    "first_name": "John",
+    "last_name": "Doe"
+}
+```
+
+#### Login
+```bash
+POST /api/accounts/login/
+{
+    "username": "john_doe",
+    "password": "securepassword123"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "token": "your_auth_token_here",
+    "user_id": 1,
+    "username": "john_doe"
+}
+```
+
+### Family Management
+
+#### Create Family (Admin)
+```bash
+POST /api/family-members/create-family-admin/
+Headers: Authorization: Token your_auth_token_here
+{
+    "family_name": "Smith Family"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "family_id": 1,
+    "family_name": "Smith Family",
+    "admin_id": 1,
+    "message": "Family created successfully"
+}
+```
+
+#### Invite Family Member
+```bash
+POST /api/family-members/invite/
+Headers: Authorization: Token your_auth_token_here
+{
+    "family_id": 1,
+    "email": "jane@example.com",
+    "role": "member"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "message": "Invitation sent successfully",
+    "invited_email": "jane@example.com"
+}
+```
+
+#### Accept Family Invitation
+```bash
+POST /api/family-members/accept-invite/
+Headers: Authorization: Token your_auth_token_here
+{
+    "invitation_token": "token_from_invite_email"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "message": "Invitation accepted",
+    "family_id": 1,
+    "family_name": "Smith Family"
+}
+```
+
+#### Get Family Member Details
+```bash
+GET /api/family-members/member/{member_id}/
+Headers: Authorization: Token your_auth_token_here
+```
+
+**Response (200 OK):**
+```json
+{
+    "id": 2,
+    "user": {
+        "id": 2,
+        "username": "jane_doe",
+        "email": "jane@example.com"
+    },
+    "family": 1,
+    "role": "member",
+    "joined_at": "2024-12-07T10:30:00Z"
+}
+```
+
+### Family Accounts
+
+#### Create Family Account
+```bash
+POST /api/family-accounts/create-family-account/
+Headers: Authorization: Token your_auth_token_here
+{
+    "family_id": 1,
+    "account_name": "Family Savings",
+    "account_type": "savings",
+    "initial_balance": 5000.00
+}
+```
+
+**Response (201 Created):**
+```json
+{
+    "id": 1,
+    "family": 1,
+    "account_name": "Family Savings",
+    "account_type": "savings",
+    "balance": 5000.00,
+    "created_at": "2024-12-07T10:30:00Z"
+}
+```
+
+### Users
+- `GET /users/` - List all users
+- `POST /users/` - Create a new user
+- `GET /users/{id}/` - Retrieve user details
+- `PUT /users/{id}/` - Update user information
+- `DELETE /users/{id}/` - Delete a user
+
+### Families
+- `GET /families/` - List all families
+- `POST /families/` - Create a new family
+- `GET /families/{id}/` - Retrieve family details
+- `PUT /families/{id}/` - Update family information
+- `DELETE /families/{id}/` - Delete a family
+
+### Transactions
+- `GET /transactions/` - List all transactions
+- `POST /transactions/` - Create a new transaction
+- `GET /transactions/{id}/` - Retrieve transaction details
+- `PUT /transactions/{id}/` - Update transaction
+- `DELETE /transactions/{id}/` - Delete transaction
+
+### Budgets
+- `GET /budgets/` - List all budgets
+- `POST /budgets/` - Create a new budget
+- `GET /budgets/{id}/` - Retrieve budget details
+- `PUT /budgets/{id}/` - Update budget
+- `DELETE /budgets/{id}/` - Delete budget
+
+### Reports
+- `GET /reports/family/{family_id}/` - Generate family-wide financial report
+- `GET /reports/user/{user_id}/` - Generate individual user financial report
+
+## Testing the API Endpoints
+
+### Using cURL (Command Line)
+
+#### 1. Register a New User
+```bash
+curl -X POST http://127.0.0.1:8000/api/accounts/register/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "securepassword123",
+    "first_name": "John",
+    "last_name": "Doe"
+  }'
+```
+
+#### 2. Login to Get Auth Token
+```bash
+curl -X POST http://127.0.0.1:8000/api/accounts/login/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "password": "securepassword123"
+  }'
+```
+Save the returned `token` for authenticated requests.
+
+#### 3. Create a Family (Authenticated)
+```bash
+curl -X POST http://127.0.0.1:8000/api/family-members/create-family-admin/ \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Token YOUR_TOKEN_HERE" \
+  -d '{
+    "family_name": "Smith Family"
+  }'
+```
+
+#### 4. Invite a Family Member
+```bash
+curl -X POST http://127.0.0.1:8000/api/family-members/invite/ \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Token YOUR_TOKEN_HERE" \
+  -d '{
+    "family_id": 1,
+    "email": "jane@example.com",
+    "role": "member"
+  }'
+```
+
+#### 5. Get Family Member Details
+```bash
+curl -X GET http://127.0.0.1:8000/api/family-members/member/2/ \
+  -H "Authorization: Token YOUR_TOKEN_HERE"
+```
+
+#### 6. Create Family Account
+```bash
+curl -X POST http://127.0.0.1:8000/api/family-accounts/create-family-account/ \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Token YOUR_TOKEN_HERE" \
+  -d '{
+    "family_id": 1,
+    "account_name": "Family Savings",
+    "account_type": "savings",
+    "initial_balance": 5000.00
+  }'
+```
+
+### Using Postman
+
+1. **Import Collection**: Create a new Postman collection
+2. **Add Variables**: 
+   - Set `base_url` = `http://127.0.0.1:8000`
+   - Set `token` = (leave blank, will be updated after login)
+
+3. **Create Requests** for each endpoint above
+
+4. **In the Login request**, go to Tests tab and add:
+```javascript
+if (pm.response.code === 200) {
+    pm.environment.set("token", pm.response.json().token);
+}
+```
+
+5. **Use token in headers** for authenticated endpoints:
+   - Key: `Authorization`
+   - Value: `Token {{token}}`
+
+### Using Python Requests
+
+```python
+import requests
+
+BASE_URL = "http://127.0.0.1:8000/api"
+
+# 1. Register
+response = requests.post(f"{BASE_URL}/accounts/register/", json={
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "securepassword123",
+    "first_name": "John",
+    "last_name": "Doe"
+})
+print(response.json())
+
+# 2. Login
+response = requests.post(f"{BASE_URL}/accounts/login/", json={
+    "username": "john_doe",
+    "password": "securepassword123"
+})
+token = response.json()["token"]
+
+# 3. Create Family (with auth)
+headers = {"Authorization": f"Token {token}"}
+response = requests.post(f"{BASE_URL}/family-members/create-family-admin/", 
+    headers=headers,
+    json={"family_name": "Smith Family"}
+)
+print(response.json())
+```
+
+## Status Codes Reference
+
+| Code | Meaning |
+|------|---------|
+| 200 | OK - Request successful |
+| 201 | Created - Resource created successfully |
+| 400 | Bad Request - Invalid input data |
+| 401 | Unauthorized - Authentication required |
+| 403 | Forbidden - Insufficient permissions |
+| 404 | Not Found - Resource not found |
+| 500 | Server Error - Internal server error |
+
+
+
+## General API Endpoint Sample
 
 ### Users
 - `GET /users/` - List all users
@@ -346,15 +665,12 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
 
-Project Maintainer - [Your Name]
-Email: your.email@example.com
-GitHub: [@yourusername](https://github.com/yourusername)
+Project Maintainer - [Blessing Ihejirika]
+Email: onyinyechukwumblessing@gmail.com
+GitHub: https://github.com/BlessingIhejirika
 
 ---
 
