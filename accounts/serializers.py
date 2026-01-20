@@ -61,7 +61,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             role=role,  
         )
 
-        Token.objects.create(user=user)
+        token =Token.objects.create(user=user)
         user.token = token.key
         return user
 

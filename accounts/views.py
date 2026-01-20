@@ -11,11 +11,19 @@ from rest_framework.permissions import AllowAny
 
 CustomUser = get_user_model() 
 
-class UserRegistrationView(generics.CreateAPIView):
+class UserRegistrationView(APIView):
     permission_classes = [AllowAny]
 
-    queryset = CustomUser.objects.all()
-    serializer_class = UserRegistrationSerializer           
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                "username": user.username,
+                "email": user.email,
+                "token": user.token  # return token to client
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)       
 
 class UserLoginView(APIView):
 
