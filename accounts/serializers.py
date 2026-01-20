@@ -62,6 +62,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
 
         Token.objects.create(user=user)
+        user.token = token.key
         return user
 
 
