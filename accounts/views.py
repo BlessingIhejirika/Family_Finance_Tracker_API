@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, get_user_model
 from django.shortcuts import get_object_or_404
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
+from rest_framework.permissions import AllowAny
+
 
 
 CustomUser = get_user_model() 
